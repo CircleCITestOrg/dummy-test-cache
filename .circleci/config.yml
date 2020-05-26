@@ -9,7 +9,7 @@ jobs:
           key: test.txt-{{ checksum "dummy-deps/dummy.lock" }}
       - run:
           name: dummy test
-          command: "true"
+          command: "./match-deps.sh"
       - save_cache:
           key: test.txt-{{ checksum "dummy-deps/dummy.lock" }}
           paths:
