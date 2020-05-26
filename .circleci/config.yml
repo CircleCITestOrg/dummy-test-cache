@@ -1,0 +1,29 @@
+version: 2.1
+jobs:
+  append-and-cache:
+    machine:
+      image: ubuntu-1604:201903-01
+    steps:
+      - checkout
+      - restore_cache:
+          key: test.txt-{{ checksum "test.txt" }}
+      - run:
+          name: append-to-file
+          command: 'echo "test" >> test.txt'
+      - save_cache:
+          key: test.txt-{{ checksum "test.txt" }}
+          paths:
+            - test.txt
+      - run:
+          name: commit-changes
+          command: |
+            git config --global user.email "test@example.com"
+            git config --global user.name "test"
+            git add .
+            git commit -m "append to test"
+            git push
+
+workflows:
+  append_and_cache:
+    jobs:
+      - append-and-cache
