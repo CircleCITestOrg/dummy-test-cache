@@ -6,22 +6,14 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: test.txt-{{ checksum "test.txt" }}
+          key: test.txt-{{ checksum "dummy-deps/dummy.lock" }}
       - run:
-          name: append-to-file
-          command: 'echo "test" >> test.txt'
+          name: dummy test
+          command: "true"
       - save_cache:
-          key: test.txt-{{ checksum "test.txt" }}
+          key: test.txt-{{ checksum "dummy-deps/dummy.lock" }}
           paths:
-            - test.txt
-      - run:
-          name: commit-changes
-          command: |
-            git config --global user.email "test@example.com"
-            git config --global user.name "test"
-            git add .
-            git commit -m "append to test"
-            git push
+            - dummy-deps
 
 workflows:
   append_and_cache:
