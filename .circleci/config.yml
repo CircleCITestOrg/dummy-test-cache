@@ -1,21 +1,44 @@
 version: 2.1
+defaults: &defaults
+  machine:
+    image: ubuntu-1604:201903-01
 jobs:
-  append-and-cache:
-    machine:
-      image: ubuntu-1604:201903-01
+  checkout:
+    <<: *defaults
     steps:
       - checkout
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  restore_cache:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
       - restore_cache:
           key: test.txt-{{ checksum "dummy-deps/dummy.lock" }}
-      - run:
-          name: dummy test
-          command: "./match-deps.sh"
+  test:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
+      - run: "./match-deps.sh"
+  save_cache:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: .
       - save_cache:
           key: test.txt-{{ checksum "dummy-deps/dummy.lock" }}
           paths:
             - dummy-deps
 
 workflows:
+  version: 2
   append_and_cache:
     jobs:
-      - append-and-cache
+      - checkout
+      - restore_cache
+      - test
+      - save_cache
