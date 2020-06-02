@@ -39,6 +39,15 @@ workflows:
   append_and_cache:
     jobs:
       - checkout
-      - restore_cache
-      - test
-      - save_cache
+      - restore_cache:
+          requires:
+            - checkout
+      - test:
+          requires:
+            - checkout
+            - restore_cache
+      - save_cache:
+          requires:
+            - checkout
+            - restore_cache
+            - test
