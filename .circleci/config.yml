@@ -2,8 +2,6 @@ version: 2.1
 defaults: &defaults
   machine:
     image: ubuntu-1604:201903-01
-orbs:
-  rust: glotrade/rust@0.1.3
 jobs:
   checkout:
     <<: *defaults
@@ -19,25 +17,18 @@ jobs:
       - attach_workspace:
           at: .
       - restore_cache:
-          key: massive-target-dir/Cargo.lock-{{ checksum massive-target-dir/Cargo.lock }}
+          key: sample.txt-{{ checksum "sample.txt" }}
   test:
     <<: *defaults
     steps:
       - attach_workspace:
           at: .
       - run: "./match-deps.sh"
-  build_rust_project:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: .
-      - rust/update_toolchain:
-          toolchain: nightly
-      - rust/build
+      - run: "dd if=/dev/urandom of=sample.txt bs=5G count=1"
       - save_cache:
-          key: massive-target-dir/Cargo.lock-{{ checksum massive-target-dir/Cargo.lock }}
+          key: sample.txt-{{ checksum "sample.txt" }}
           paths:
-            - massive-target-dir/target
+            - .
 
 workflows:
   version: 2
@@ -48,10 +39,6 @@ workflows:
           requires:
             - checkout
       - test:
-          requires:
-            - checkout
-            - restore_cache
-      - build_rust_project:
           requires:
             - checkout
             - restore_cache
