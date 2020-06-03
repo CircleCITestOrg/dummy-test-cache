@@ -31,8 +31,9 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - rust/test:
+      - rust/update_toolchain:
           toolchain: nightly
+      - rust/build
   save_cache:
     <<: *defaults
     steps:
