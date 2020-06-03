@@ -34,11 +34,6 @@ jobs:
       - rust/update_toolchain:
           toolchain: nightly
       - rust/build
-  save_cache:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: .
       - save_cache:
           key: massive-target-dir/Cargo.lock-{{ checksum massive-target-dir/Cargo.lock }}
           paths:
@@ -60,8 +55,3 @@ workflows:
           requires:
             - checkout
             - restore_cache
-      - save_cache:
-          requires:
-            - checkout
-            - restore_cache
-            - test
