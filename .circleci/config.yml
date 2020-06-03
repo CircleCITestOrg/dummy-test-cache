@@ -14,6 +14,7 @@ jobs:
 
   test:
     <<: *defaults
+    parallelism: 2
     steps:
       - attach_workspace:
           at: .
