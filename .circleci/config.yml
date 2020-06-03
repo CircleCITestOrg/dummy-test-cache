@@ -31,10 +31,6 @@ workflows:
   append_and_cache:
     jobs:
       - checkout
-      - restore_cache:
-          requires:
-            - checkout
       - test:
           requires:
             - checkout
-            - restore_cache
