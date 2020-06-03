@@ -7,6 +7,7 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - run: "touch sample.txt"
       - persist_to_workspace:
           root: .
           paths:
