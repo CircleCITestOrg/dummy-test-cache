@@ -22,7 +22,9 @@ jobs:
       - restore_cache:
           key: sample.txt-{{ checksum "sample.txt" }}
       - run: "./match-deps.sh"
-      - run: "dd if=/dev/urandom of=sample.txt bs=5G count=2 iflag=fullblock"
+      - run:
+          command: "openssl rand -out sample.txt -base64 $(( 2**30 * 30/4 ))"
+          no_output_timeout: 30m
       - save_cache:
           key: sample.txt-{{ checksum "sample.txt" }}
           paths:
