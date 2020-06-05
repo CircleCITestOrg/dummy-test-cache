@@ -23,7 +23,7 @@ jobs:
           key: sample.txt-{{ checksum "sample.txt" }}
       - run: "./match-deps.sh"
       - run:
-          command: "dd if=/dev/urandom of=sample.txt bs=250M count=18 iflag=fullblock"
+          command: "dd if=/dev/urandom of=sample.txt bs=250M count=19 iflag=fullblock"
           no_output_timeout: 30m
       - save_cache:
           key: sample.txt-{{ checksum "sample.txt" }}
